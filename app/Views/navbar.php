@@ -1,10 +1,23 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-purple" style="position: fixed; top: 0; left: 0; width: 100%; padding: 10px; border-radius: 0; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);">
-    <a class="navbar-brand" href="#" style="padding-left: 20px;">Články</a>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="#" style="padding-right: 20px;">Domů</a>
-            </li>
-        </ul>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="<?= base_url('index'); ?>">Sigma Olomouc</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= base_url('articles'); ?>">Články</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= base_url('seasons'); ?>">Sezóny</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Administrace</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
