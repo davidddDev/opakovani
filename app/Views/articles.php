@@ -4,7 +4,7 @@
 <div class="container mt-5 pt-5">
     <div class="row">
         <?php foreach ($articles as $article) : ?>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 mb-2">
             <a href="<?= base_url('article/' . $article->id); ?>" class="text-decoration-none">
                 <div class="card text-white position-relative overflow-hidden" style="border-radius: 15px;">
                     <div class="card-img" style="background-image: url('<?= base_url('sigma/' . $article->photo); ?>'); 

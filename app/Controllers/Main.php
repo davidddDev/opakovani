@@ -38,43 +38,70 @@ class Main extends BaseController
     }
 
     public function seasons()
-    {
-        $seasons = (new Season())->orderBy('start', 'desc')->findAll();
+{
+    $seasons = (new Season())
+        ->orderBy('start', 'desc')
+        ->findAll();
 
-        // Seskupení po desetiletích jako objekt
-        $groupedSeasons = new \stdClass();
-        foreach ($seasons as $season) {
-            $decade = floor($season->start / 10) * 10;
-            if (!property_exists($groupedSeasons, $decade)) {
-                $groupedSeasons->$decade = new \stdClass();
-            }
-            $groupedSeasons->$decade->{$season->id} = $season;
-        }
+    $groupedSeasons = [];
 
-        return view('seasons', ['groupedSeasons' => $groupedSeasons]);
+    foreach ($seasons as $season) {
+        $decade = floor($season->start / 10) * 10;
+        $groupedSeasons[$decade][$season->id] = $season;
     }
 
+    return view('seasons', [
+        'groupedSeasons' => $groupedSeasons
+    ]);
+}
+
+    
     public function seasonDetail($id)
 {
     $season = (new Season())->find($id);
 
-    // JOIN na tabulku lig, abychom získali název ligy
     $competitionsArr = (new \App\Models\LeagueSeason())
         ->select('fot_league_season.*, fot_league.name AS league_name')
         ->join('fot_league', 'fot_league.id = fot_league_season.id_league')
         ->where('id_season', $id)
         ->findAll();
 
-    $competitions = new \stdClass();
-    foreach ($competitionsArr as $competition) {
-        $competitions->{$competition->id} = $competition;
+        foreach ($competitionsArr as $competition) {
+            $competitions[$competition->id] = $competition;
+        }
+    
+        return view('seasons_detail', [
+            'season'       => $season,
+            'competitions' => $competitions
+        ]);
     }
-
-    return view('seasons_detail', [
-        'season' => $season,
-        'competitions' => $competitions
-    ]);
+    public function manageArticles()
+{
+    $articles = (new Article())
+        ->orderBy('id', 'asc') 
+        ->findAll();
+    return view('articles_manage', ['articles' => $articles]);
 }
 
+public function createArticle()
+{
+    $allLinks = (new Article())->findAll(); // všechny články pro select
+    return view('article_form', ['allLinks' => $allLinks]);
+}
 
+public function storeArticle()
+{
+    $model = new Article();
+    $data = [
+        'title'     => $this->request->getPost('title'),
+        'text'      => $this->request->getPost('text'),
+        'photo'     => $this->request->getPost('photo'),
+        'link'      => $this->request->getPost('link'),
+        'top'       => $this->request->getPost('top') ?? 0,
+        'published' => $this->request->getPost('published') ?? 1,
+        'date'      => time()
+    ];
+    $model->save($data);
+    return redirect()->to('/articles/manage');
+}
 }
